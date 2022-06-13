@@ -31,7 +31,7 @@ public class Tree {
         return nodo.getElement();
     }
     
-    public Nodo getFather(Nodo nodo) {
+    public Object getFather(Nodo nodo) {
         return nodo.getFather();
     }
     
@@ -50,77 +50,49 @@ public class Tree {
         return isLeaf;
     }
     
-    public void insert(int element,Integer father) {
-        Nodo[] sons = new Nodo[1];
-        Nodo nodo = new Nodo(element,null,sons);
-        if(getRoot() == null) {
-            setRoot(nodo);
+    public void insertRecursive(Nodo root,String element,String fatherForAdd) {
+        Nodo newNodo = new Nodo(element, fatherForAdd);
+        
+        // Si el padre del nodo que yo quiero agregar es la Raiz
+        if (root.getElement().equals(fatherForAdd)) {
+            increaseSons(root, newNodo);
         } else {
-            Nodo temp = searchNodo(getRoot(), father, 0);
-            if (temp != null){
-                Nodo[] newSons = copySons(temp.getSons());
-                temp.setSons(orderSons(newSons, nodo));
-            }
-        }
-    }
-    
-    public Nodo[] orderSons(Nodo[] newSons, Nodo nodo) {
-       Nodo[] copynewSons = new Nodo[newSons.length];
-       boolean inserted = false;
-       int pos = -1;
-        for (int i = 0; i < newSons.length; i++) {
-            if (newSons[i] != null) {
-                if (!inserted && (int)nodo.getElement() < (int)newSons[i].getElement()) {
-                copynewSons[i] = nodo;
-                inserted = true;
-                pos = i;
-                break;
-            } else {
-                    copynewSons[i] = newSons[i];
+            // Si el padre del nodo que yo quiero agregar es alguno de los hijos de root
+            for (int i = 0; i < root.getSons().length; i++) {
+                if (root.getSons()[i].getElement().equals(fatherForAdd)) {
+                    // Se coloca el hijo en el padre seleccionado
+                    increaseSons(root.getSons()[i], newNodo);
+                } else {
+                    // Significa que no lo conseguimos en el nivel superior y bajamos al siguiente nivel del arbol
+                    insertRecursive(root.getSons()[i], element, fatherForAdd);
                 }
-            } 
-        }
-        for (int i = pos; i < copynewSons.length; i++) {
-            
-            if (i+1 < copynewSons.length){
-                copynewSons[i] = newSons[i];
             }
         }
-        return copynewSons;
     }
     
     public Nodo[] copySons(Nodo[] sons){
-        Nodo[] newSons = new Nodo[sons.length + 1];
-        for (int i = 0; i < sons.length; i++) {
-            newSons[i] = sons[i];
-        }
-        return newSons;
+        if (sons != null) {
+            Nodo[] newSons = new Nodo[sons.length + 1];
+            for (int i = 0; i < sons.length; i++) {
+                newSons[i] = sons[i];
+            }
+            return newSons;
+        } 
+        return new Nodo[1];
     }
     
-    public Nodo searchNodo(Nodo root,int element,int pos) {
-        Nodo nodo = null;
-        if(root != null){
-            if((int)root.getElement() == element){
-                return root;
-            }
-            if(pos + 1 <= root.getSons().length) {
-                nodo = searchNodo(root.getSons()[pos], element,pos+1);
-            }
-            if(nodo == null) {
-               nodo = searchNodo(root.getRightBrother(), element, pos+1); 
-            }
-        }
-        return nodo;
+    public void increaseSons(Nodo root, Nodo nodo){
+        Nodo[] newSons = copySons(root.getSons());
+        newSons[newSons.length - 1] = nodo;
+        root.setSons(newSons);
     }
     
-    public void printPreOrden(Nodo root,int pos) {
-        if(root != null){
-            System.out.println(root.getElement());
-            if(pos + 1 <= root.getSons().length) {
-                printPreOrden(root.getSons()[pos],pos+1);
-            }
-            printPreOrden(root.getRightBrother(), pos+1);
+    public void printPreOrden(Nodo root) {
+        // Se imprime la Raiz
+        System.out.println( " { "+ root.getElement() + " } " );
+        for (int i = 0; i < root.getSons().length; i++) {
+            // Se imprimen los hijos
+            printPreOrden(root.getSons()[i]); 
         }
-        
     }
 }

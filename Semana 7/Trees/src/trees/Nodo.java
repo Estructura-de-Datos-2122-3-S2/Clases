@@ -3,14 +3,15 @@ package trees;
 public class Nodo {
     private Object element;
     private Nodo rightBrother;
-    private Nodo father;
+    private Object father;
     private Nodo[] sons;
 
-    public Nodo(Object element, Nodo father, Nodo[] sons) {
+    
+    public Nodo(Object element, Object father) {
         this.element = element;
-        this.rightBrother = null;
         this.father = father;
-        this.sons = sons;
+        this.rightBrother = null;
+        this.sons = new Nodo[0];
     }
 
     public Object getElement() {
@@ -29,11 +30,11 @@ public class Nodo {
         this.rightBrother = rightBrother;
     }
 
-    public Nodo getFather() {
+    public Object getFather() {
         return father;
     }
 
-    public void setFather(Nodo father) {
+    public void setFather(Object father) {
         this.father = father;
     }
 
@@ -44,7 +45,4 @@ public class Nodo {
     public void setSons(Nodo[] sons) {
         this.sons = sons;
     }
-    
-    
-    
 }
