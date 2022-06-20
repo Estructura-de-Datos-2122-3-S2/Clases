@@ -55,19 +55,24 @@ public class BinaryTree {
         }
     }
     
-    public void insertNodoRecursive(Nodo root,int element,Nodo father){
+    public Nodo insertNodoRecursive(Nodo root,int element,Nodo father){
         Nodo newNodo = new Nodo(element);
-        if (root == null) {
-            root = newNodo;
-            newNodo.setFather(father);
-            
+        if (isEmpty()) {
+            setRoot(newNodo);
         } else {
-            if (root.getElement() > element) {
-                insertNodoRecursive(root.getLeftSon(), element, root);
+            if (root == null) {
+                newNodo.setFather(father);
+                return newNodo;
             } else {
-                insertNodoRecursive(root.getRightSon(), element, root);
+                if (root.getElement() > element) {
+                    root.setLeftSon(insertNodoRecursive(root.getLeftSon(), element, root));
+
+                } else {
+                    root.setRightSon(insertNodoRecursive(root.getRightSon(), element, root));
+                }
             }
         }
+        return root;
     }
     
     public void insertNodo(Nodo root,int element){
@@ -113,10 +118,41 @@ public class BinaryTree {
                     root.setFather(null);
                 } else if(root.getLeftSon() == null) {
                     // Solo Tiene hijo derecho
+                    if (root.getFather().getLeftSon().getElement() == element) {
+                        root.getFather().setLeftSon(root.getRightSon());
+                    } else {
+                        root.getFather().setRightSon(root.getRightSon());
+                    }
+                    root.setRightSon(null);
+                    root.setFather(null);
                 } else if(root.getRightSon()== null) {
                     // Solo Tiene hijo izquierdo
+                    if (root.getFather().getLeftSon().getElement() == element) {
+                        root.getFather().setLeftSon(root.getLeftSon());
+                    } else {
+                        root.getFather().setRightSon(root.getLeftSon());
+                    }
+                    root.setLeftSon(null);
+                    root.setFather(null);
                 } else {
                     // Tiene dos hijos
+                    Nodo nodo = searchMin(root.getRightSon());
+                    if (root.getFather().getLeftSon().getElement() == element) {
+                        nodo.setLeftSon(root.getLeftSon());
+                        nodo.setRightSon(root.getRightSon());
+                        nodo.getFather().setLeftSon(null);
+                        nodo.setFather(root.getFather());
+                        root.getFather().setLeftSon(nodo);
+                    } else {
+                        nodo.setLeftSon(root.getLeftSon());
+                        nodo.setRightSon(root.getRightSon());
+                        nodo.getFather().setLeftSon(null);
+                        nodo.setFather(root.getFather());
+                        root.getFather().setRightSon(nodo);
+                    }
+                    root.setFather(null);
+                    root.setLeftSon(null);
+                    root.setRightSon(null);
                 }
             } else if (root.getElement() < element) {
                 deleteNodo(root.getRightSon(), element);
@@ -125,6 +161,13 @@ public class BinaryTree {
             }
         }
         
+    }
+    
+    public Nodo searchMin(Nodo root) {
+        while (root.getLeftSon() != null){
+            root = root.getLeftSon();
+        }
+        return root;
     }
     
     public boolean isEmpty() {
