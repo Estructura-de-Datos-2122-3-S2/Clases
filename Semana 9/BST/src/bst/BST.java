@@ -12,8 +12,8 @@ public class BST {
        tree.insertNodoRecursive(tree.getRoot(), 1, tree.getRoot());
        tree.insertNodoRecursive(tree.getRoot(), 19, tree.getRoot());
        tree.insertNodoRecursive(tree.getRoot(), 79, tree.getRoot());
-       tree.insertNodoRecursive(tree.getRoot(), 65, tree.getRoot());
-       tree.insertNodoRecursive(tree.getRoot(), 82, tree.getRoot());
+//       tree.insertNodoRecursive(tree.getRoot(), 65, tree.getRoot());
+//       tree.insertNodoRecursive(tree.getRoot(), 82, tree.getRoot());
 //       tree.insertNodo(tree.getRoot(), 3);
 
        Nodo nodo = tree.searchNodo(tree.getRoot(), 19);

@@ -139,13 +139,17 @@ public class BinaryTree {
                     Nodo nodo = searchMin(root.getRightSon());
                     if (root.getFather().getLeftSon().getElement() == element) {
                         nodo.setLeftSon(root.getLeftSon());
-                        nodo.setRightSon(root.getRightSon());
+                        if(root.getRightSon().getElement() != nodo.getElement()){
+                            nodo.setRightSon(root.getRightSon());
+                        }
                         nodo.getFather().setLeftSon(null);
                         nodo.setFather(root.getFather());
                         root.getFather().setLeftSon(nodo);
                     } else {
                         nodo.setLeftSon(root.getLeftSon());
-                        nodo.setRightSon(root.getRightSon());
+                        if(root.getRightSon().getElement() != nodo.getElement()){
+                            nodo.setRightSon(root.getRightSon());
+                        }
                         nodo.getFather().setLeftSon(null);
                         nodo.setFather(root.getFather());
                         root.getFather().setRightSon(nodo);
